@@ -1,7 +1,8 @@
 {
 	"name": "type-asserter",
 	"version": "1.0.0",
-	"description2": "Make assertions regarding valid/invalid types and literal values",
+	"description": "Make assertions regarding valid/invalid types and literal values",
+	"type": "module",
 	"main": "dist/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
