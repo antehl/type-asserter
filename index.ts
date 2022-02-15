@@ -34,7 +34,7 @@ type LiteralObject = {
 };
 
 /**
- * @param {LiteralObject} values Example: { variableName: "value", ... } or { variableName, ... }
+ * @param {{name: value}} values Example: { variableName: "value", ... } or { variableName, ... }
  * @param {any} types Single/array of type object(s) and/or literal value(s)
  * @param {boolean} invert Flips the assertion, asserts none of the value(s) are of any of the defined type(s)
  */
