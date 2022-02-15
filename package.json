@@ -1,0 +1,36 @@
+{
+	"name": "type-asserter",
+	"version": "1.0.0",
+	"description2": "Make assertions regarding valid/invalid types and literal values",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"type",
+		"types",
+		"check",
+		"guard",
+		"assert",
+		"validate",
+		"validation",
+		"typeof",
+		"instanceof",
+		"test",
+		"testing",
+		"valid",
+		"invalid",
+		"verify",
+		"is"
+	],
+	"author": "antehl",
+	"license": "ISC",
+	"repository": "github:antehl/type-asserter",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"engines": {
+		"node": ">=10.4.0"
+	}
+}
