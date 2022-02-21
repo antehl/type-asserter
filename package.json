@@ -2,10 +2,23 @@
 	"name": "type-asserter",
 	"version": "1.0.0",
 	"description": "Make assertions regarding valid/invalid types and literal values",
+	"author": "antehl",
+	"license": "MIT",
 	"type": "module",
 	"main": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"files": [
+		"index.ts, index.d.ts"
+	],
+	"engines": {
+		"node": ">=10.4.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/antehl/type-asserter"
 	},
 	"keywords": [
 		"type",
@@ -23,12 +36,5 @@
 		"invalid",
 		"verify",
 		"is"
-	],
-	"author": "antehl",
-	"license": "ISC",
-	"repository": "github:antehl/type-asserter",
-	"types": "index.d.ts",
-	"engines": {
-		"node": ">=10.4.0"
-	}
+	]
 }

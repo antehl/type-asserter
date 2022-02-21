@@ -1,12 +1,10 @@
-const format = value =>
+const format = (value: any) =>
 	typeof value === "string"
 		? `'${value}'`
 		: typeof value === "bigint"
 		? `${value}n`
-		: // JSON.stringify sometimes returns "null" (as a string) e.g. JSON.stringify(NaN)
-		value?.name || JSON.parse(JSON?.stringify(value))
-		? JSON.stringify(value)
-		: `${value}`;
+		: value?.name || // JSON.stringify sometimes returns "null" (as a string) e.g. JSON.stringify(NaN)
+		  (JSON.parse(JSON?.stringify(value)) ? JSON.stringify(value) : `${value}`);
 
 const sendError = (value: any, name: any, types: any[], invert: boolean) => {
 	const formattedValue = format(value);
@@ -60,7 +58,7 @@ export default function assertType(
 			sendError(value, valueIndex, types, invert);
 
 		objectTypes.length === 0 ||
-			objectTypes.filter((type: any) =>
+			+!!objectTypes.filter((type: any) =>
 				primitives.includes(type)
 					? typeof value === type.name.toLowerCase()
 					: value instanceof type
