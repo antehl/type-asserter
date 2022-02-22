@@ -8,9 +8,9 @@ const format = (value: any) =>
 		: value?.name ||
 		  // JSON.stringify sometimes returns "null" or undefined e.g. JSON.stringify(NaN)
 		  // JSON.parse trying to parse undefined throws an error
-		  (JSON.stringify(value) && JSON.parse(JSON.stringify(value)))
-		? JSON.stringify(value)
-		: `${value}`;
+		  (JSON.stringify(value) && JSON.parse(JSON.stringify(value))
+				? JSON.stringify(value)
+				: `${value}`);
 
 const sendError = (value: any, name: any, types: any[], invert: boolean) => {
 	const formattedValue = format(value);
@@ -49,8 +49,8 @@ export default function assertType(
 ) {
 	(values && typeof values === "object" && !(values instanceof Array)) ||
 		sendError(values, "values", [Object], false);
-	types || sendError(values, "values", [Array], false);
-	typeof invert === "boolean" || sendError(values, "values", [Boolean], false);
+	types || sendError(types, "types", [Array], false);
+	typeof invert === "boolean" || sendError(invert, "invert", [Boolean], false);
 
 	if (!Array.isArray(types)) types = [types];
 	const objectTypes = types.filter((e: any) => e instanceof Function);
