@@ -2,8 +2,14 @@ const format = (value) => typeof value === "string"
     ? `'${value}'`
     : typeof value === "bigint"
         ? `${value}n`
-        : value?.name || // JSON.stringify sometimes returns "null" (as a string) e.g. JSON.stringify(NaN)
-            (JSON.parse(JSON?.stringify(value)) ? JSON.stringify(value) : `${value}`);
+        : typeof value === "symbol"
+            ? value.toString()
+            : value?.name ||
+                // JSON.stringify sometimes returns "null" or undefined e.g. JSON.stringify(NaN)
+                // JSON.parse trying to parse undefined throws an error
+                (JSON.stringify(value) && JSON.parse(JSON.stringify(value)))
+                ? JSON.stringify(value)
+                : `${value}`;
 const sendError = (value, name, types, invert) => {
     const formattedValue = format(value);
     const formattedTypes = types.map(type => format(type)).join(" | ");
