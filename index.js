@@ -16,6 +16,12 @@ const sendError = (value, name, types, invert) => {
     const invalidPrefix = invert ? "non-" : "";
     throw new TypeError(`Invalid value ${formattedValue} assigned to {${name}}, ${invalidPrefix}valid types being [ ${formattedTypes} ].`);
 };
+//---
+//---
+// TODO!!!!!!
+// {var: 3}, [Number, NaN] -> false
+//---
+//---
 // 1 instanceof Number ............ -> false
 // typeof 1	....................... -> "number"
 // new Number(0) instanceof Number  -> true
@@ -25,8 +31,8 @@ const sendError = (value, name, types, invert) => {
 // checks for these inputs (vvv) will be through typeof to fix javascript type weirdness
 const primitives = [Object, String, Number, Boolean, BigInt, Symbol];
 /**
- * @param {{name: value}} values Example: { variableName: "value", ... } or { variableName, ... }
- * @param {any} types Single/array of type object(s) and/or literal value(s)
+ * @param {{name: value}} values Example: { varName: "value", ... } or { varName, ... }
+ * @param {any} types Single/array of class type(s) and/or literal value(s)
  * @param {boolean} invert Flips the assertion, asserts none of the value(s) are of any of the defined type(s)
  */
 export default function assertType(values, types, invert = false) {
