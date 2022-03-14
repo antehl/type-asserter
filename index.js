@@ -1,6 +1,3 @@
-/**
- * @returns {void}
- */
 const format = value =>
 	typeof value === "string"
 		? `'${value}'`
@@ -18,7 +15,6 @@ const format = value =>
 /**
  * @param {any[]} types
  * @param {boolean} invert
- * @returns {void}
  */
 const sendError = (value, name, types, invert) => {
 	const formattedValue = format(value);
@@ -42,10 +38,9 @@ const sendError = (value, name, types, invert) => {
 const primitives = [Object, String, Number, Boolean, BigInt, Symbol];
 
 /**
- * @param {{name: value}} values Example: { varName: "value", ... } or { varName, ... }
- * @param {any} types Single/array of class type(s) and/or literal value(s)
- * @param {boolean} invert Flips the assertion, asserts none of the value(s) are of any of the defined type(s)
- * @returns {void}
+ * @param {{[varname: string]: any}} values Array/single variable name(s): { varname1, varname2 }
+ * @param types Array/single class type(s) and/or literal value(s)
+ * @param {boolean} invert Flips the assertion - asserts none of the values are of any of the defined type(s)
  */
 export default function assertType(values, types, invert = false) {
 	(values && typeof values === "object" && !(values instanceof Array)) ||
