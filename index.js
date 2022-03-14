@@ -35,7 +35,7 @@ const sendError = (values, types, invert = false) => {
 	const formattedTypes = types.map(type => format(type)).join(" | ");
 	const invalidPrefix = invert ? "non-" : "";
 	throw new TypeError(
-		`Invalid value ${formattedValue} assigned to {${name}}, ${invalidPrefix}valid types being [ ${formattedTypes} ].`
+		`Invalid value ${formattedValue} assigned to { ${name} }, ${invalidPrefix}valid types being [ ${formattedTypes} ].`
 	);
 };
 
