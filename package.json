@@ -7,18 +7,12 @@
 	"type": "module",
 	"main": "index.js",
 	"types": "index.d.ts",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"engines": {
-		"node": ">=10.4.0"
-	},
+	"repository": "github:antehl/type-asserter",
 	"files": [
 		"index.d.ts"
 	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/antehl/type-asserter"
+	"engines": {
+		"node": ">=10.4.0"
 	},
 	"keywords": [
 		"type",
@@ -35,6 +29,7 @@
 		"valid",
 		"invalid",
 		"verify",
-		"is"
+		"is",
+		"expect"
 	]
 }
