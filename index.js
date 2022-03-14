@@ -1,22 +1,36 @@
-const format = value =>
-	typeof value === "string"
-		? `'${value}'`
-		: typeof value === "bigint"
-		? `${value}n`
-		: typeof value === "symbol"
-		? value.toString()
-		: value?.name ||
-		  // JSON.stringify sometimes returns "null" or undefined e.g. JSON.stringify(NaN)
-		  // JSON.parse trying to parse undefined throws an error
-		  (JSON.stringify(value) && JSON.parse(JSON.stringify(value))
-				? JSON.stringify(value)
-				: `${value}`);
+/**
+ * @returns {string | undefined}
+ */
+const valueFormat = value => {
+	const type = typeof value;
+	if (type === "string") return `'${value}'`;
+	if (type === "bigint") return `${value}n`;
+	if (type === "symbol") return value.toString();
+
+	if (value instanceof RegExp) return value.toString();
+
+	return value.name;
+};
 
 /**
+ * @returns {string | undefined}
+ */
+const jsonFormat = value => {
+	let stringified = JSON.stringify(value);
+	// JSON.stringify sometimes returns "null" or undefined e.g. JSON.stringify(NaN)
+	// JSON.parse trying to parse undefined throws an error
+	if (stringified && JSON.parse(stringified)) return stringified;
+};
+
+const format = value => valueFormat(value) || jsonFormat(value) || `${value}`;
+
+/**
+ * @param {{[varname: string]: any}} values
  * @param {any[]} types
  * @param {boolean} invert
  */
-const sendError = (value, name, types, invert) => {
+const sendError = (values, types, invert = false) => {
+	const [name, value] = Object.entries(values)[0];
 	const formattedValue = format(value);
 	const formattedTypes = types.map(type => format(type)).join(" | ");
 	const invalidPrefix = invert ? "non-" : "";
@@ -43,28 +57,25 @@ const primitives = [Object, String, Number, Boolean, BigInt, Symbol];
  * @param {boolean} invert Flips the assertion - asserts none of the values are of any of the defined type(s)
  */
 export default function assertType(values, types, invert = false) {
-	(values && typeof values === "object" && !(values instanceof Array)) ||
-		sendError(values, "values", [Object], false);
-	types || sendError(types, "types", [Array], false);
-	typeof invert === "boolean" || sendError(invert, "invert", [Boolean], false);
+	if (!values || typeof values !== "object" || values instanceof Array)
+		sendError({ values }, [Object]);
+	if (!types) sendError({ types }, [Array]);
+	if (typeof invert !== "boolean") sendError({ invert }, [Boolean]);
 
 	if (!Array.isArray(types)) types = [types];
 	const objectTypes = types.filter(e => e instanceof Function);
 	const literalTypes = types.filter(e => !(e instanceof Function));
 
-	for (const valueIndex in values) {
-		const value = values[valueIndex];
+	for (const name in values) {
+		const value = values[name];
+		const objectTypesMatching = objectTypes.filter(type =>
+			primitives.includes(type)
+				? typeof value === type.name.toLowerCase()
+				: value instanceof type
+		);
+		const doesMatch =
+			objectTypesMatching.length !== 0 || literalTypes.includes(value);
 
-		literalTypes.length === 0 ||
-			literalTypes.includes(value) ^ invert ||
-			sendError(value, valueIndex, types, invert);
-
-		objectTypes.length === 0 ||
-			+!!objectTypes.filter(type =>
-				primitives.includes(type)
-					? typeof value === type.name.toLowerCase()
-					: value instanceof type
-			).length ^ invert ||
-			sendError(value, valueIndex, types, invert);
+		if (!doesMatch ^ invert) sendError({ [name]: value }, types, invert);
 	}
 }
