@@ -75,9 +75,11 @@ export const isType = (values, types) => {
  * @param {boolean} invert Flips the assertion - asserts none of the values are of any of the defined type(s)
  */
 export const assertType = (values, types, invert = false) => {
+	if (!Array.isArray(types)) types = [types];
 	if (typeof invert !== "boolean") sendError({ invert }, [Boolean]);
-	if (!isType(values, types) ^ invert) {
-		if (!Array.isArray(types)) types = [types];
-		sendError(values, types, invert);
+
+	for (const name in values) {
+		if (isType(values[name], types) ^ invert) continue;
+		sendError({ [name]: values[name] }, types, invert);
 	}
 };
