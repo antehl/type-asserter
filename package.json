@@ -11,9 +11,6 @@
 	"files": [
 		"index.d.ts"
 	],
-	"engines": {
-		"node": ">=10.4.0"
-	},
 	"keywords": [
 		"type",
 		"types",
