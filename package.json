@@ -1,7 +1,7 @@
 {
 	"name": "type-asserter",
 	"version": "1.0.0",
-	"description": "Make assertions regarding valid/invalid types and literal values",
+	"description": "Make assertions and perform checks regarding types and literal values",
 	"author": "antehl",
 	"license": "MIT",
 	"type": "module",
