@@ -37,7 +37,7 @@ const jsonFormat = value => {
 const format = value => valueFormat(value) || jsonFormat(value) || `${value}`;
 
 /**
- * @param {{[varname: string]: any}} values
+ * @param {{[label: string]: any}} values
  * @param {any[]} types
  * @param {boolean} invert
  */
@@ -47,13 +47,13 @@ const sendError = (values, types, invert = false) => {
 	const formattedTypes = types.map(type => format(type)).join(" | ");
 	const invalidPrefix = invert ? "non-" : "";
 	throw new TypeError(
-		`Invalid value ${formattedValue} assigned to { ${name} }, ${invalidPrefix}valid types being [ ${formattedTypes} ].`
+		`Invalid value ${formattedValue} for {${name}}, ${invalidPrefix}valid types being [ ${formattedTypes} ].`
 	);
 };
 
 /**
- * @param {{[varname: string]: any}} values Array/single variable name(s): { varname1, varname2 }
- * @param types Array/single class type(s) and/or literal value(s)
+ * @param {any | any[]} values Any amount of values
+ * @param {any | any[]} types Any combination of types, classes and literal values
  */
 export const isType = (values, types) => {
 	if (!Array.isArray(values)) values = [values];
@@ -70,9 +70,9 @@ export const isType = (values, types) => {
 };
 
 /**
- * @param {{[varname: string]: any}} values Array/single variable name(s): { varname1, varname2 }
- * @param types Array/single class type(s) and/or literal value(s)
- * @param {boolean} invert Flips the assertion - asserts none of the values are of any of the defined type(s)
+ * @param {{[label: string]: any}} values Any amount of labels with values: { label1: 123, label2, ... }
+ * @param {any | any[]} types Any combination of types, classes and literal values
+ * @param {boolean} invert Flips the assertion: asserts none of the values are of any of the specified types
  */
 export const assertType = (values, types, invert = false) => {
 	if (!Array.isArray(types)) types = [types];
