@@ -37,42 +37,20 @@ const sendError = (values, types, invert = false) => {
 	);
 };
 
-// 1 instanceof Number  . . . . . .	-> false
-// new Number(1) instanceof Number 	-> true
-// Number instanceof Number . . . .	-> false
-// Number instanceof Function . . .	-> true
-// typeof 1	. . . . . . . . . . . .	-> "number"
-// typeof new Number(1) . . . . . .	-> "object"
-// typeof Number  . . . . . . . . .	-> "function"
-
-// checks for types below will be through typeof to fix javascript type weirdness
-// replaces 'instanceof' check with 'typeof' for these
-const primitives = [Object, String, Number, Boolean, BigInt, Symbol];
-
 /**
  * @param {{[varname: string]: any}} values Array/single variable name(s): { varname1, varname2 }
  * @param types Array/single class type(s) and/or literal value(s)
  */
 export const isType = (values, types) => {
-	if (!values || typeof values !== "object" || values instanceof Array)
-		sendError({ values }, [Object]);
-	if (!types) sendError({ types }, [Array]);
+	if (!Array.isArray(values)) values = [values];
 	if (!Array.isArray(types)) types = [types];
 
-	const objectTypes = types.filter(e => e instanceof Function);
-	const literalTypes = types.filter(e => !(e instanceof Function));
+	const classes = types.filter(e => e?.constructor === Function);
+	const literals = types.filter(e => e?.constructor !== Function);
 
-	for (const name in values) {
-		const value = values[name];
-		const objectTypesMatching = objectTypes.filter(type =>
-			primitives.includes(type)
-				? typeof value === type.name.toLowerCase()
-				: value instanceof type
-		);
-		const doesMatch =
-			objectTypesMatching.length !== 0 || literalTypes.includes(value);
-
-		if (!doesMatch) return false;
+	for (const value of values) {
+		if (!classes.includes(value?.constructor) && !literals.includes(value))
+			return false;
 	}
 	return true;
 };
