@@ -7,7 +7,7 @@ const valueFormat = value => {
 	if (type === "bigint") return `${value}n`;
 	if (type === "symbol") return value.toString();
 	if (value instanceof RegExp) return value.toString();
-	if (value?.name) return `<${value?.name}>`;
+	if (value?.name) return `${value?.name}`;
 	return;
 };
 
