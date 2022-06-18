@@ -7,17 +7,31 @@ const valueFormat = value => {
 	if (type === "bigint") return `${value}n`;
 	if (type === "symbol") return value.toString();
 	if (value instanceof RegExp) return value.toString();
-	return value.name;
+	if (value?.name) return `<${value?.name}>`;
+	return;
 };
 
 /**
  * @returns {string | undefined}
  */
 const jsonFormat = value => {
-	let stringified = JSON.stringify(value);
+	let stringified = JSON.stringify(value, null, 1);
 	// JSON.stringify sometimes returns "null" or undefined e.g. JSON.stringify(NaN)
 	// JSON.parse trying to parse undefined throws an error
-	if (stringified && JSON.parse(stringified)) return stringified;
+	try {
+		JSON.parse(stringified);
+	} catch {
+		return;
+	}
+	stringified = stringified
+		// condense newlines but keep spacing
+		.replaceAll(/\n\s*/g, " ")
+		// remove quotes from keys
+		.replaceAll(/\"(\w+)\":/g, "$1:")
+		// shorten json if over 50 chars
+		.replaceAll(/(.{50}).*/g, "$1 ... }");
+	if (value?.constructor && value.constructor !== Object)
+		return `<${value.constructor.name} ${stringified}>`;
 };
 
 const format = value => valueFormat(value) || jsonFormat(value) || `${value}`;
