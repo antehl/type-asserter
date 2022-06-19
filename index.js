@@ -2,11 +2,12 @@
  * @returns {string | undefined}
  */
 const valueFormat = value => {
-	const type = typeof value;
-	if (type === "string") return `'${value}'`;
-	if (type === "bigint") return `${value}n`;
-	if (type === "symbol") return value.toString();
-	if (value instanceof RegExp) return value.toString();
+	const type = value.constructor;
+	if (type === Number) return value;
+	if (type === String) return `'${value}'`;
+	if (type === BigInt) return `${value}n`;
+	if (type === Symbol) return value.toString();
+	if (type === RegExp) return value.toString();
 	if (value?.name) return `${value?.name}`;
 	return;
 };
